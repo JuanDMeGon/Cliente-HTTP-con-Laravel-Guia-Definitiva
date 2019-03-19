@@ -12,7 +12,7 @@ trait ConsumesExternalServices
      */
     public function makeRequest($method, $requestUrl, $queryParams = [], $formParams = [], $headers = [])
     {
-        $clien = new Client([
+        $client = new Client([
             'base_uri' => $this->baseUri,
         ]);
 
