@@ -9,6 +9,17 @@ class MarketService
     use ConsumesExternalServices;
 
     /**
+     * The url from which send the requests
+     * @var string
+     */
+    protected $baseUri;
+
+    public function __construct()
+    {
+        $this->baseUri = config('services.market.base_uri');
+    }
+
+    /**
      * Resolves the elements to send when authorazing the request
      * @param  array &$queryParams
      * @param  array &$formParams
