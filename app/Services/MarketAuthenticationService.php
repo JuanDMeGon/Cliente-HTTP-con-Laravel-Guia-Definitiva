@@ -8,8 +8,6 @@ use App\Traits\InteractsWithMarketResponses;
 
 class MarketAuthenticationService
 {
-    use ConsumesExternalServices, InteractsWithMarketResponses;
-
     /**
      * The url from which send the requests
      * @var string
@@ -40,6 +38,8 @@ class MarketAuthenticationService
      */
     protected $passwordClientSecret;
 
+    use ConsumesExternalServices, InteractsWithMarketResponses;
+
     public function __construct()
     {
         $this->baseUri = config('services.market.base_uri');
@@ -47,5 +47,18 @@ class MarketAuthenticationService
         $this->clientSecret = config('services.market.client_secret');
         $this->passwordClientId = config('services.market.password_client_id');
         $this->passwordClientSecret = config('services.market.password_client_secret');
+    }
+
+    public function getClientCredentialsToken()
+    {
+        $formParams = [
+            'grant_type' => 'client_credentials',
+            'client_id' => $this->clientId,
+            'client_secret' => $this->clientSecret,
+        ];
+
+        $tokenData = $this->makeRequest('POST', 'oauth/token', [], $formParams);
+
+        return "{$tokenData->token_type} {$tokenData->access_token}";
     }
 }
