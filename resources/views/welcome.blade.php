@@ -13,7 +13,7 @@
                 <div class="col">
                     <ul class="list-group">
                         @foreach($categories as $category)
-                            <a class="list-group-item" href="#">
+                            <a class="list-group-item" href="{{route('categories.products.show', ['title' => $category->title, 'id' => $category->identifier])}}">
                                 {{$category->title}}
                             </a>
                         @endforeach
