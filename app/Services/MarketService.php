@@ -48,4 +48,14 @@ class MarketService
     {
         return $this->makeRequest('GET', 'categories');
     }
+
+    /**
+     * * Obtains a product from the API
+     * @param  int $id
+     * @return stdClass
+     */
+    public function getCategoryProducts($id)
+    {
+        return $this->makeRequest('GET', "categories/{$id}/products");
+    }
 }
