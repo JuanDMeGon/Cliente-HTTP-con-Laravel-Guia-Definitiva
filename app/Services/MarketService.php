@@ -93,6 +93,23 @@ class MarketService
     }
 
     /**
+     * Allows to purchase a product
+     * @param  int $productId
+     * @param  int $buyerId
+     * @param  int $quantity
+     * @return sdtClass
+     */
+    public function purchaseProduct($productId, $buyerId, $quantity)
+    {
+        return $this->makeRequest(
+            'POST',
+            "products/{$productId}/buyers/{$buyerId}/transactions",
+            [],
+            ['quantity' => $quantity]
+        );
+    }
+
+    /**
      * Obtains the list of categories from the API
      * @return stdClass
      */

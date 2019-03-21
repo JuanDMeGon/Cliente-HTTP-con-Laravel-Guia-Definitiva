@@ -37,9 +37,17 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function purchaseProduct()
+    public function purchaseProduct(Request $request, $title, $id)
     {
-        //
+        $this->marketService->purchaseProduct($id, $request->user()->service_id, 1);
+
+        return redirect()
+            ->route('products.show',
+                [
+                    $title,
+                    $id,
+                ])
+            ->with('success', ['Product purchased']);
     }
 
     /**
