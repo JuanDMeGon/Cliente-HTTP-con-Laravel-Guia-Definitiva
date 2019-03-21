@@ -103,7 +103,7 @@ class MarketAuthenticationService
 
         $this->storeValidToken($tokenData, 'authorization_code');
 
-        return $tokenData->access_token;
+        return $tokenData;
     }
 
     /**

@@ -6,6 +6,7 @@ use App\User;
 use Illuminate\Http\Request;
 use App\Services\MarketService;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use App\Services\MarketAuthenticationService;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
@@ -77,7 +78,9 @@ class LoginController extends Controller
 
             $user = $this->registerOrUpdateUser($userData, $tokenData);
 
-            return;
+            $this->loginUser($user);
+
+            return redirect()->intended('home');
         }
 
         return redirect()->route('login')->withErrors(['You caneceled the authorization process']);
@@ -93,7 +96,7 @@ class LoginController extends Controller
     {
         return User::updateOrCreate(
             [
-                'service_id' => $userData->service_id,
+                'service_id' => $userData->identifier,
             ],
             [
                 'grant_type' => $tokenData->grant_type,
@@ -102,5 +105,18 @@ class LoginController extends Controller
                 'token_expires_at' => $tokenData->token_expires_at,
             ]
         );
+    }
+
+    /**
+     * Authenticates a user on the CLient
+     * @param  App\User    $user
+     * @param  boolean $remember
+     * @return void
+     */
+    public function loginUser(User $user, $remember = true)
+    {
+        Auth::login($user, $remember);
+
+        session()->regenerate();
     }
 }
