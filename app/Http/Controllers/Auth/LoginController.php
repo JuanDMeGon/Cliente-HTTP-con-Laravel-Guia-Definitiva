@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\User;
 use Illuminate\Http\Request;
 use App\Services\MarketService;
 use App\Http\Controllers\Controller;
@@ -74,9 +75,32 @@ class LoginController extends Controller
 
             $userData = $this->marketService->getUserInformation();
 
+            $user = $this->registerOrUpdateUser($userData, $tokenData);
+
             return;
         }
 
         return redirect()->route('login')->withErrors(['You caneceled the authorization process']);
+    }
+
+    /**
+     * Creates or updates a user from the API
+     * @param  stdClass $userData
+     * @param  stdClass $tokenData
+     * @return App\User
+     */
+    public function registerOrUpdateUser($userData, $tokenData)
+    {
+        return User::updateOrCreate(
+            [
+                'service_id' => $userData->service_id,
+            ],
+            [
+                'grant_type' => $tokenData->grant_type,
+                'access_token' => $tokenData->access_token,
+                'refresh_token' => $tokenData->refresh_token,
+                'token_expires_at' => $tokenData->token_expires_at,
+            ]
+        );
     }
 }
