@@ -68,6 +68,10 @@ class MarketAuthenticationService
         return $tokenData->access_token;
     }
 
+    /**
+     * Generate a url for the authorization button
+     * @return string
+     */
     public function resolveAuthorizationUrl()
     {
         $query = http_build_query([
@@ -78,6 +82,28 @@ class MarketAuthenticationService
         ]);
 
         return "{$this->baseUri}/oauth/authorize?{$query}";
+    }
+
+    /**
+     * Obtains an access token from a given code
+     * @param  string $token
+     * @return stdClass
+     */
+    public function getCodeToken($code)
+    {
+        $formParams = [
+            'grant_type' => 'authorization_code',
+            'client_id' => $this->clientId,
+            'client_secret' => $this->clientSecret,
+            'redirect_uri' => route('authorization'),
+            'code' => $code,
+        ];
+
+        $tokenData = $this->makeRequest('POST', 'oauth/token', [], $formParams);
+
+        $this->storeValidToken($tokenData, 'authorization_code');
+
+        return $tokenData->access_token;
     }
 
     /**
