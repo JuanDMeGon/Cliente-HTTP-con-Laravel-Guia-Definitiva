@@ -41,6 +41,24 @@ class MarketService
     }
 
     /**
+     * Publish a product on the API
+     * @param  int $sellerId
+     * @param  array $productData
+     * @return sdtClass
+     */
+    public function publishProduct($sellerId, $productData)
+    {
+        return $this->makeRequest(
+            'POST',
+            "sellers/{$sellerId}/products",
+            [],
+            $productData,
+            [],
+            $hasFile = true
+        );
+    }
+
+    /**
      * Obtains the list of categories from the API
      * @return stdClass
      */
