@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Services\MarketAuthenticationService;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
 class LoginController extends Controller
@@ -28,12 +29,38 @@ class LoginController extends Controller
     protected $redirectTo = '/home';
 
     /**
+     * The service to perform authentication actions
+     *
+     * @var App\Services\MarketAuthenticationService
+     */
+    protected $marketAuthenticationService;
+
+    /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(MarketAuthenticationService $marketAuthenticationService)
     {
         $this->middleware('guest')->except('logout');
+
+        $this->marketAuthenticationService = $marketAuthenticationService;
+    }
+
+    /**
+     * Show the application's login form.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function showLoginForm()
+    {
+        $authorizationUrl = $this->marketAuthenticationService->resolveAuthorizationUrl();
+
+        return view('auth.login')->with(['authorizationUrl' => $authorizationUrl]);
+    }
+
+    public function authorization()
+    {
+
     }
 }
