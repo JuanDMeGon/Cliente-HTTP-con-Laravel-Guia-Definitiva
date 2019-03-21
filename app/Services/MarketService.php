@@ -146,4 +146,14 @@ class MarketService
     {
         return $this->makeRequest('GET', "buyers/{$buyerId}/products");
     }
+
+    /**
+     * Obtains a list of publications
+     * @param  int $sellerId
+     * @return stdClass
+     */
+    public function getPublications($sellerId)
+    {
+        return $this->makeRequest('GET', "sellers/{$sellerId}/products");
+    }
 }
