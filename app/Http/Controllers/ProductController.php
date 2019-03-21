@@ -49,7 +49,11 @@ class ProductController extends Controller
      */
     public function showPublishProductForm()
     {
-        //
+        $categories = $this->marketService->getCategories();
+
+        return view('products.publish')->with([
+            'categories' => $categories,
+        ]);
     }
 
     /**
