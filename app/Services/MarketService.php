@@ -72,6 +72,27 @@ class MarketService
     }
 
     /**
+     * Update a product on the API
+     * @param  int $sellerId
+     * @param  int $productId
+     * @param  array $productData
+     * @return sdtClass
+     */
+    public function updateProduct($sellerId, $productId, $productData)
+    {
+        $productData['_method'] = 'PUT';
+
+        return $this->makeRequest(
+            'POST',
+            "sellers/{$sellerId}/products/{$productId}",
+            [],
+            $productData,
+            [],
+            $hasFile = isset($productData['picture'])
+        );
+    }
+
+    /**
      * Obtains the list of categories from the API
      * @return stdClass
      */
