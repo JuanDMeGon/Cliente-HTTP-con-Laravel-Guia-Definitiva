@@ -136,4 +136,14 @@ class MarketService
     {
         return $this->makeRequest('GET', "users/me");
     }
+
+    /**
+     * Obtains a list of purchases
+     * @param  int $buyerId
+     * @return stdClass
+     */
+    public function getPurchases($buyerId)
+    {
+        return $this->makeRequest('GET', "buyers/{$buyerId}/products");
+    }
 }

@@ -36,7 +36,11 @@ class HomeController extends Controller
      */
     public function showPurchases(Request $request)
     {
-        //
+        $purchases = $this->marketService->getPurchases($request->user()->service_id);
+
+        return view('purchases')->with([
+            'purchases' => $purchases,
+        ]);
     }
 
     /**
