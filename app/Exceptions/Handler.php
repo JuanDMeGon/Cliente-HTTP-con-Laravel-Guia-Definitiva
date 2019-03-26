@@ -55,18 +55,25 @@ class Handler extends ExceptionHandler
         return parent::render($request, $exception);
     }
 
+    /**
+     * Handle client exceptions
+     *
+     * @param  \Guzzle\Exception\ClientException  $exception
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
     protected function handleClientException(ClientException $exception, $request)
     {
         $code = $exception->getCode();
 
-        $response = json_decode($exception->getBody()->getContents());
+        $response = json_decode($exception->getResponse()->getBody()->getContents());
         $errorMessage = $response->error;
 
         switch ($code) {
             case Response::HTTP_UNAUTHORIZED:
                 $request->session()->invalidate();
 
-                if ($request->user) {
+                if ($request->user()) {
                     Auth::logout();
 
                     return redirect()
@@ -78,8 +85,7 @@ class Handler extends ExceptionHandler
 
 
             default:
-                # code...
-                break;
+                return redirect()->back()->withErrors(['message' => $errorMessage]);
         }
     }
 }
