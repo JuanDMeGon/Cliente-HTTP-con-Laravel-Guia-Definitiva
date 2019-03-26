@@ -3,6 +3,8 @@
 namespace App\Exceptions;
 
 use Exception;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 use GuzzleHttp\Exception\ClientException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
@@ -61,9 +63,19 @@ class Handler extends ExceptionHandler
         $errorMessage = $response->error;
 
         switch ($code) {
-            case 'value':
-                # code...
-                break;
+            case Response::HTTP_UNAUTHORIZED:
+                $request->session()->invalidate();
+
+                if ($request->user) {
+                    Auth::logout();
+
+                    return redirect()
+                        ->route('welcome')
+                        ->withErrors(['message' => 'The authentication failed. Please login again.']);
+                }
+
+                throw new \Exception('Error authenticating request. Try again.', 0, $exception);
+
 
             default:
                 # code...
