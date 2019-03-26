@@ -81,8 +81,7 @@ class Handler extends ExceptionHandler
                         ->withErrors(['message' => 'The authentication failed. Please login again.']);
                 }
 
-                throw new \Exception('Error authenticating request. Try again.', 0, $exception);
-
+                abort(500, 'Error authenticating request. Try again.');
 
             default:
                 return redirect()->back()->withErrors(['message' => $errorMessage]);
